@@ -1,6 +1,15 @@
 import { assert, it } from 'vitest'
-import { name } from '../src'
+import { analyzeCssFileContent, name } from '../src'
+import { case1 } from './test-css-case'
 
-it('simple', () => {
-  assert.equal(name, 'pkg-name')
+it('simple', async () => {
+  // assert.equal(name, 'pkg-name')
+  const result = await analyzeCssFileContent(
+    case1,
+    {
+      prefix: 'delta-',
+      ignoreCss: []
+    }
+  )
+  assert.equal
 })
