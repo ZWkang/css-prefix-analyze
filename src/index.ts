@@ -108,19 +108,25 @@ export async function analyzeCssFileContent(content: string, options: IOptions )
                continue;
             }
 
+            const text = needExpressions.map( item => item?.value).join(' ')
 
-            result.push(expressions);
+            if(text === '-1') {
+               console.log(selector, parsedSelector)
+            }
+            result.push(text);
          }
       }
    }
 
-   return result;
+   return Array.from(new Set(result.filter(Boolean)));
 }
 
 ; (async () => {
    const result = (await readFile('./src/d.css')).toString('utf-8')
-   await analyzeCssFileContent(result, {
+   const res = await analyzeCssFileContent(result, {
       prefix: 'delta-',
       ignoreCss: [/CodeMirror/]
    })
+
+   console.log(res?.filter(item => !/CodeMirror|cm-|t-icon/.test(item)));
 })()

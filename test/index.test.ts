@@ -1,9 +1,8 @@
 import { assert, it } from 'vitest'
-import { analyzeCssFileContent, name } from '../src'
-import { case1 } from './test-css-case'
+import { analyzeCssFileContent } from '../src'
+import { case1, case2, case3 } from './test-css-case'
 
-it('simple', async () => {
-  // assert.equal(name, 'pkg-name')
+it('simple test case 1', async () => {
   const result = await analyzeCssFileContent(
     case1,
     {
@@ -11,5 +10,29 @@ it('simple', async () => {
       ignoreCss: []
     }
   )
-  assert.equal
+  assert.equal(result?.length, 0)
+})
+
+it('simple test case 2', async () => {
+  const result = await analyzeCssFileContent(
+    case2,
+    {
+      prefix: 'delta-',
+      ignoreCss: []
+    }
+  );
+
+  assert.equal(result?.length, 0)
+})
+
+it('simple test case 3', async () => {
+  const result = await analyzeCssFileContent(
+    case3,
+    {
+      prefix: 'delta-',
+      ignoreCss: []
+    }
+  );
+
+  assert.equal(result?.length, 1);
 })
