@@ -26,7 +26,7 @@ function combine<T extends Record<string ,any>>(list: T[]) {
    const result: T[] = []
    // while()
    for(const item of list) {
-      if(item?.type === 'attribute') {
+      if(item?.type === 'attribute' || item.type === 'tag') {
          result.push(item);
       } else {
          break;
@@ -51,7 +51,7 @@ function filterPseudoRoot(rule: cssWhat.Selector, prefix: string) {
 
 function isMatchPrefixClassName(rule: cssWhat.Selector, prefix: string) {
    const regexp = new RegExp(`^${prefix}`)
-   if(rule?.type === 'attribute' && regexp.test(rule.value)) {
+   if(rule?.type === 'attribute' && rule.name === 'class' && regexp.test(rule.value)) {
       return true
    }
 
@@ -104,16 +104,12 @@ export async function analyzeCssFileContent(content: string, options: IOptions )
             if(expressions?.[0] && !filterPseudoRoot(expressions[0], prefix)) {
                continue;
             }
+            console.log(needExpressions)
             if(checkExpression) {
                continue;
             }
 
-            const text = needExpressions.map( item => item?.value).join(' ')
-
-            if(text === '-1') {
-               console.log(selector, parsedSelector)
-            }
-            result.push(text);
+            result.push(cssWhat.stringify(parsedSelector));
          }
       }
    }
