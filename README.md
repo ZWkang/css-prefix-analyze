@@ -1,28 +1,61 @@
 # @zwkang-dev/analyze-css-dirty
 
-> description:
+> description: to analyze css dirty global style
 
-## Features
+## Example
 
-- tsup The simplest and fastest way to bundle your TypeScript libraries.
-- pnpm awesome package manager
-- Eslint + Prettier good format and format checker
-- TypeScript, of course!!
+```bash
+pnpm add @zwkang-dev/analyze-css-dirty
 
-## Try it now
+```
 
-## copy usage remove this please !!
+```ts
+import { analyzeCssFileContent } from '@zwkang-dev/analyze-css-dirty';
 
-a simple description
+const result = analyzeCssFileContent(`
+  .a {
+    color: red;
+  }
+  .b {
+    color: blue;
+  }
+`, {
+    prefix: 't-',
+    ignoreCss: []
+});
 
-Inspired by
+console.log(result);
 
-- [antfu/starter-ts](https://github.com/antfu/starter-ts)
-- [egoist/ts-lib-starter](https://github.com/egoist/ts-lib-starter)
+// [
+//   { selector: '.a', path: '', source: '' },
+//   { selector: '.b', path: '', source: '' }
+// ]
 
-setup a default template to build your own tool, awesome !!
+const result = analyzeCssFileContent(`
+  .a {
+    color: red;
+  }
+  .b {
+    color: blue;
+  }
+  .t-icon {
+    color: yellow;
+  }
+`, {
+    prefix: 't-',
+    ignoreCss: [],
+    detail: true,
+    source: 'test.css'
+});
 
-find all @zwkang-dev/analyze-css-dirty and replace them all!!
+console.log(result);
+
+// [
+//   { selector: '.a', path: 'test.css:2:3', source: 'test.css' },
+//   { selector: '.b', path: 'test.css:5:3', source: 'test.css' }
+// ]
+
+```
 
 ## LICENSE
 
