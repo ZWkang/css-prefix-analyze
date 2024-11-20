@@ -1,5 +1,6 @@
 import * as css from 'css'
-import cssWhat from 'css-what'
+import type { Selector, } from 'css-what'
+import { parse, stringify } from 'css-what'
 
 function combine<T extends Record<string, any>>(list: T[]) {
    const result: T[] = []
@@ -13,7 +14,7 @@ function combine<T extends Record<string, any>>(list: T[]) {
    return result;
 }
 
-function filterPseudoRoot(rule: cssWhat.Selector, prefix: string) {
+function filterPseudoRoot(rule: Selector, prefix: string) {
    // 如果是全局伪类
    if (rule?.type === 'pseudo' && rule.name === 'root') {
       // 过滤掉
@@ -27,7 +28,7 @@ function filterPseudoRoot(rule: cssWhat.Selector, prefix: string) {
    return true;
 }
 
-function isMatchPrefixClassName(rule: cssWhat.Selector, prefix: string) {
+function isMatchPrefixClassName(rule: Selector, prefix: string) {
    const regexp = new RegExp(`^${prefix}`)
    if (rule?.type === 'attribute' && rule.name === 'class' && regexp.test(rule.value)) {
       return true
@@ -113,9 +114,9 @@ export async function analyzeCssFileContent(content: string, options: IOptions) 
             if (filter(selector)) {
                continue;
             }
-            const parsedSelector = cssWhat.parse(selector);
+            const parsedSelector = parse(selector);
 
-            const expressions: cssWhat.Selector[] = [];
+            const expressions: Selector[] = [];
 
             for (let i = 0, len = parsedSelector[0].length; i < len; i++) {
                expressions.push(parsedSelector[0][i]);
@@ -130,7 +131,7 @@ export async function analyzeCssFileContent(content: string, options: IOptions) 
                continue;
             }
             result.push({
-               selector: cssWhat.stringify(parsedSelector),
+               selector: stringify(parsedSelector),
                path: detail && source ? makePositionPath(source, rule.position!.start!) : '',
                source: source,
             })
